@@ -1166,11 +1166,6 @@
         "signature": "ef022c91ea9e75ab4082f2e881f9c4db7b346be2da706e876b253bebce5e6140",
         "affectsGlobalScope": false
       },
-      "../src/users/users.controller.ts": {
-        "version": "f0efb73a751819a0b5fe64414fbecfd6970f677a9a1a7948f015941b0cea258a",
-        "signature": "92d6a7351ea1686c0800d49768e0c1a728f4a11daf6b640bc02328681dcc6f0d",
-        "affectsGlobalScope": false
-      },
       "../src/posts/posts.controller.ts": {
         "version": "7d0c7a28af4e5b66a0c9f811d3b24cf0b4f48b6e2a4e6714e4baa61967f9b13f",
         "signature": "79883fde7bef705090fcc70f013b9f1a550352154b9e1ad34b88766fb8df3c84",
@@ -2496,9 +2491,29 @@
         "signature": "8f1241f5d9f0d3d72117768b3c974e462840fbd85026fb66685078945404cf2f",
         "affectsGlobalScope": false
       },
+      "../src/users/users.entity.ts": {
+        "version": "4ab965b9dc1415506caa45be96485d73f7111caf3537b75c6a15ce0a8d5ebe98",
+        "signature": "f940e6fdf9025eb6151e5c37e765ff729f15004d225aecc5099be41737eac4be",
+        "affectsGlobalScope": false
+      },
+      "../src/users/users.service.ts": {
+        "version": "f7e7db2e58a17b67d5e190a4c2c98a02022a5387f22dd8cbc814d28c92f8a342",
+        "signature": "07532c550c0993301380a410139f14315ff5a829107461626c83cc767411286c",
+        "affectsGlobalScope": false
+      },
+      "../src/users/users.controller.ts": {
+        "version": "434538e1777b1f54586b33f7cdca76c504c7f0850aa45d72cbe9261e45b9f31f",
+        "signature": "59681605cbc1b13d2d657308bb9a5ff3b275480961d0f5624d1385a6b9c80215",
+        "affectsGlobalScope": false
+      },
+      "../src/users/users.module.ts": {
+        "version": "11ee3f3dfb902916158b312aec76293f51a2dd82bc83970f13a757ebe628f840",
+        "signature": "aa1725e38b5a0b4009f6a74f296f173e7926c119a60454dbd2e523861735df69",
+        "affectsGlobalScope": false
+      },
       "../src/app.module.ts": {
-        "version": "1c88c3351d160f5e9c09504137e4955583f2fa91f8e63463c621ab37e59acb57",
-        "signature": "b82491e2990291580288c5602d4c017238977749d52b17391f0e45d9a29be644",
+        "version": "6bb14cd91d93d00883004b6906b05e41449a7a4125ceb323a8a976c1810c7872",
+        "signature": "15a7a2df96a0044b095d9658ac63e44331c417dfcc6f817fc8fd979232df5df1",
         "affectsGlobalScope": false
       },
       "../node_modules/@nestjs/core/adapters/http-adapter.d.ts": {
@@ -5583,11 +5598,13 @@
       "../src/app.module.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@nestjs/typeorm/index.d.ts",
+        "../node_modules/@types/node/path.d.ts",
+        "../node_modules/typeorm/index.d.ts",
         "../src/app.controller.ts",
         "../src/app.service.ts",
         "../src/comments/comments.controller.ts",
         "../src/posts/posts.controller.ts",
-        "../src/users/users.controller.ts"
+        "../src/users/users.module.ts"
       ],
       "../src/app.service.ts": [
         "../node_modules/@nestjs/common/index.d.ts"
@@ -5603,7 +5620,25 @@
         "../node_modules/@nestjs/common/index.d.ts"
       ],
       "../src/users/users.controller.ts": [
-        "../node_modules/@nestjs/common/index.d.ts"
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../src/users/users.entity.ts",
+        "../src/users/users.service.ts"
+      ],
+      "../src/users/users.entity.ts": [
+        "../node_modules/typeorm/index.d.ts"
+      ],
+      "../src/users/users.module.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@nestjs/typeorm/index.d.ts",
+        "../src/users/users.controller.ts",
+        "../src/users/users.entity.ts",
+        "../src/users/users.service.ts"
+      ],
+      "../src/users/users.service.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@nestjs/typeorm/index.d.ts",
+        "../node_modules/typeorm/index.d.ts",
+        "../src/users/users.entity.ts"
       ]
     },
     "exportedModulesMap": {
@@ -7953,6 +7988,17 @@
       ],
       "../src/app.controller.ts": [
         "../src/app.service.ts"
+      ],
+      "../src/app.module.ts": [
+        "../node_modules/typeorm/index.d.ts"
+      ],
+      "../src/users/users.controller.ts": [
+        "../src/users/users.entity.ts",
+        "../src/users/users.service.ts"
+      ],
+      "../src/users/users.service.ts": [
+        "../node_modules/typeorm/index.d.ts",
+        "../src/users/users.entity.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [

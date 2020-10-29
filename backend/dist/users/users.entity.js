@@ -9,26 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersController = void 0;
-const common_1 = require("@nestjs/common");
-const users_service_1 = require("./users.service");
-let UsersController = class UsersController {
-    constructor(usersService) {
-        this.usersService = usersService;
-    }
-    findAll() {
-        return this.usersService.findAll();
-    }
+exports.UsersEntity = void 0;
+const typeorm_1 = require("typeorm");
+let UsersEntity = class UsersEntity {
 };
 __decorate([
-    common_1.Get(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "findAll", null);
-UsersController = __decorate([
-    common_1.Controller('users'),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
-], UsersController);
-exports.UsersController = UsersController;
-//# sourceMappingURL=users.controller.js.map
+    typeorm_1.PrimaryColumn('varchar', { length: 20 }),
+    __metadata("design:type", String)
+], UsersEntity.prototype, "username", void 0);
+__decorate([
+    typeorm_1.Column('varchar', { nullable: false }),
+    __metadata("design:type", String)
+], UsersEntity.prototype, "hashedPassword", void 0);
+__decorate([
+    typeorm_1.Column('boolean', { default: false, nullable: false }),
+    __metadata("design:type", Boolean)
+], UsersEntity.prototype, "isModerator", void 0);
+UsersEntity = __decorate([
+    typeorm_1.Entity()
+], UsersEntity);
+exports.UsersEntity = UsersEntity;
+//# sourceMappingURL=users.entity.js.map

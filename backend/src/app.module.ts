@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersController } from './users/users.controller';
 import { PostsController } from './posts/posts.controller';
 import { CommentsController } from './comments/comments.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
+import { Connection } from 'typeorm';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -15,12 +17,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'root',
       password: 'p@ssw0rd',
       database: 'compsecproject',
-      entities: [],
+      entities: [join(__dirname, '**/*.entity{.ts,.js}')],
       synchronize: true,
       insecureAuth: true,
     }),
+    UsersModule,
   ],
-  controllers: [AppController, UsersController, PostsController, CommentsController],
+  controllers: [AppController, PostsController, CommentsController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private connection: Connection) {}
+}
