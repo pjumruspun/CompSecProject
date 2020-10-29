@@ -10,12 +10,28 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const users_controller_1 = require("./users/users.controller");
+const posts_controller_1 = require("./posts/posts.controller");
+const comments_controller_1 = require("./comments/comments.controller");
+const typeorm_1 = require("@nestjs/typeorm");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     common_1.Module({
-        imports: [],
-        controllers: [app_controller_1.AppController],
+        imports: [
+            typeorm_1.TypeOrmModule.forRoot({
+                type: 'mysql',
+                host: 'db',
+                port: 3306,
+                username: 'root',
+                password: 'p@ssw0rd',
+                database: 'compsecproject',
+                entities: [],
+                synchronize: true,
+                insecureAuth: true,
+            }),
+        ],
+        controllers: [app_controller_1.AppController, users_controller_1.UsersController, posts_controller_1.PostsController, comments_controller_1.CommentsController],
         providers: [app_service_1.AppService],
     })
 ], AppModule);
