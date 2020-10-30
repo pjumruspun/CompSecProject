@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3001);
+  require('dotenv').config({ path: __dirname + '/.env'})
+  await app.listen(process.env.BACKEND_SERVICE_PORT);
 }
 bootstrap();
