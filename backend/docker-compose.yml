@@ -18,5 +18,5 @@ services:
     ports:
       - "3306:3306"
     environment: 
-      MYSQL_ROOT_PASSWORD: p@ssw0rd
-      MYSQL_DATABASE: "compsecproject"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${DB_NAME}"

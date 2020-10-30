@@ -2511,8 +2511,38 @@
         "signature": "aa1725e38b5a0b4009f6a74f296f173e7926c119a60454dbd2e523861735df69",
         "affectsGlobalScope": false
       },
+      "../node_modules/nestjs-easyconfig/dist/config.interface.d.ts": {
+        "version": "783f19b8f799d3187354b5dcfcbd14cadaf86d6366c9cd361a46dcb7ef3d0370",
+        "signature": "783f19b8f799d3187354b5dcfcbd14cadaf86d6366c9cd361a46dcb7ef3d0370",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/nestjs-easyconfig/dist/easyconfig.module.d.ts": {
+        "version": "95e2cfd15256aa6cac87160750a96a2829e1cec5d4db81566591706a0aa8d3ad",
+        "signature": "95e2cfd15256aa6cac87160750a96a2829e1cec5d4db81566591706a0aa8d3ad",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/nestjs-easyconfig/dist/easyconfig.service.d.ts": {
+        "version": "3de7e4ada2138b6a4344445fdb586a2c6ab50c5cc8569e368b807ddcadcb9177",
+        "signature": "3de7e4ada2138b6a4344445fdb586a2c6ab50c5cc8569e368b807ddcadcb9177",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/nestjs-easyconfig/dist/easyconfig.error.d.ts": {
+        "version": "2fe869e40c4c0ccd42646dab62d48bd019aaa6b0d2a89c8eb6d36a385c794fff",
+        "signature": "2fe869e40c4c0ccd42646dab62d48bd019aaa6b0d2a89c8eb6d36a385c794fff",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/nestjs-easyconfig/dist/index.d.ts": {
+        "version": "075dcddd6a1f7e96533cd632b417fdd2f947881b7e38ca2ef6c7321623d50cb9",
+        "signature": "075dcddd6a1f7e96533cd632b417fdd2f947881b7e38ca2ef6c7321623d50cb9",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/nestjs-easyconfig/index.d.ts": {
+        "version": "8f1241f5d9f0d3d72117768b3c974e462840fbd85026fb66685078945404cf2f",
+        "signature": "8f1241f5d9f0d3d72117768b3c974e462840fbd85026fb66685078945404cf2f",
+        "affectsGlobalScope": false
+      },
       "../src/app.module.ts": {
-        "version": "6bb14cd91d93d00883004b6906b05e41449a7a4125ceb323a8a976c1810c7872",
+        "version": "6957b397c2788c5c9b186cdc93563b97554f2764b59be1f1d58c8f4eb3a19ec1",
         "signature": "15a7a2df96a0044b095d9658ac63e44331c417dfcc6f817fc8fd979232df5df1",
         "affectsGlobalScope": false
       },
@@ -2697,7 +2727,7 @@
         "affectsGlobalScope": false
       },
       "../src/main.ts": {
-        "version": "75bf26829727d1e589352423d9e620c3268c6b14541273c93cd2ebd0adcbb3b4",
+        "version": "f38195b1e137511506e78d9f5f83e3c5891ccafabe23112d9b6a0db73b195ebb",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
@@ -4231,6 +4261,24 @@
         "../node_modules/jest-diff/build/cleanupSemantic.d.ts",
         "../node_modules/jest-diff/build/types.d.ts"
       ],
+      "../node_modules/nestjs-easyconfig/dist/config.interface.d.ts": [
+        "../node_modules/@nestjs/common/index.d.ts"
+      ],
+      "../node_modules/nestjs-easyconfig/dist/easyconfig.module.d.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/nestjs-easyconfig/dist/config.interface.d.ts"
+      ],
+      "../node_modules/nestjs-easyconfig/dist/easyconfig.service.d.ts": [
+        "../node_modules/nestjs-easyconfig/dist/config.interface.d.ts"
+      ],
+      "../node_modules/nestjs-easyconfig/dist/index.d.ts": [
+        "../node_modules/nestjs-easyconfig/dist/easyconfig.error.d.ts",
+        "../node_modules/nestjs-easyconfig/dist/easyconfig.module.d.ts",
+        "../node_modules/nestjs-easyconfig/dist/easyconfig.service.d.ts"
+      ],
+      "../node_modules/nestjs-easyconfig/index.d.ts": [
+        "../node_modules/nestjs-easyconfig/dist/index.d.ts"
+      ],
       "../node_modules/pretty-format/build/index.d.ts": [
         "../node_modules/pretty-format/build/types.d.ts"
       ],
@@ -5599,6 +5647,7 @@
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@nestjs/typeorm/index.d.ts",
         "../node_modules/@types/node/path.d.ts",
+        "../node_modules/nestjs-easyconfig/index.d.ts",
         "../node_modules/typeorm/index.d.ts",
         "../src/app.controller.ts",
         "../src/app.service.ts",
@@ -6625,6 +6674,24 @@
       "../node_modules/jest-diff/build/printDiffs.d.ts": [
         "../node_modules/jest-diff/build/cleanupSemantic.d.ts",
         "../node_modules/jest-diff/build/types.d.ts"
+      ],
+      "../node_modules/nestjs-easyconfig/dist/config.interface.d.ts": [
+        "../node_modules/@nestjs/common/index.d.ts"
+      ],
+      "../node_modules/nestjs-easyconfig/dist/easyconfig.module.d.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/nestjs-easyconfig/dist/config.interface.d.ts"
+      ],
+      "../node_modules/nestjs-easyconfig/dist/easyconfig.service.d.ts": [
+        "../node_modules/nestjs-easyconfig/dist/config.interface.d.ts"
+      ],
+      "../node_modules/nestjs-easyconfig/dist/index.d.ts": [
+        "../node_modules/nestjs-easyconfig/dist/easyconfig.error.d.ts",
+        "../node_modules/nestjs-easyconfig/dist/easyconfig.module.d.ts",
+        "../node_modules/nestjs-easyconfig/dist/easyconfig.service.d.ts"
+      ],
+      "../node_modules/nestjs-easyconfig/index.d.ts": [
+        "../node_modules/nestjs-easyconfig/dist/index.d.ts"
       ],
       "../node_modules/pretty-format/build/index.d.ts": [
         "../node_modules/pretty-format/build/types.d.ts"

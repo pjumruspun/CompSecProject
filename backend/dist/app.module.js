@@ -19,6 +19,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const path_1 = require("path");
 const typeorm_2 = require("typeorm");
 const users_module_1 = require("./users/users.module");
+const nestjs_easyconfig_1 = require("nestjs-easyconfig");
 let AppModule = class AppModule {
     constructor(connection) {
         this.connection = connection;
@@ -27,13 +28,14 @@ let AppModule = class AppModule {
 AppModule = __decorate([
     common_1.Module({
         imports: [
+            nestjs_easyconfig_1.EasyconfigModule.register({ path: '.env' }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'mysql',
-                host: 'db',
-                port: 3306,
-                username: 'root',
-                password: 'p@ssw0rd',
-                database: 'compsecproject',
+                host: process.env.TYPEORM_HOST,
+                port: Number(process.env.DB_PORT),
+                username: process.env.TYPEORM_USERNAME,
+                password: process.env.DB_ROOT_PASSWORD,
+                database: process.env.DB_NAME,
                 entities: [path_1.join(__dirname, '**/*.entity{.ts,.js}')],
                 synchronize: true,
                 insecureAuth: true,

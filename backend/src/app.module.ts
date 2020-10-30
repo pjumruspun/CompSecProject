@@ -7,16 +7,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { Connection } from 'typeorm';
 import { UsersModule } from './users/users.module';
+import { EasyconfigModule } from 'nestjs-easyconfig';
 
 @Module({
   imports: [
+    EasyconfigModule.register({ path: '.env' }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'db',
-      port: 3306,
-      username: 'root',
-      password: 'p@ssw0rd',
-      database: 'compsecproject',
+      host: process.env.TYPEORM_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.TYPEORM_USERNAME,
+      password: process.env.DB_ROOT_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [join(__dirname, '**/*.entity{.ts,.js}')],
       synchronize: true,
       insecureAuth: true,
