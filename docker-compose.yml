@@ -4,7 +4,7 @@ services:
   backend:
     build: backend
     ports: 
-      - 3001:3001
+      - "${BACKEND_SERVICE_PORT}:${BACKEND_SERVICE_PORT}"
     links:
       - db:mysql
     depends_on:
@@ -24,7 +24,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     container_name: "mysql"
     ports:
-      - "3306:3306"
+      - "${DB_PORT}:${DB_PORT}"
     environment: 
-      MYSQL_ROOT_PASSWORD: p@ssw0rd
-      MYSQL_DATABASE: "compsecproject"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${DB_NAME}"
