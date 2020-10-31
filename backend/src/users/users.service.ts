@@ -23,14 +23,8 @@ export class UsersService {
     // Is there any better way? Feel free to suggest
     async create(usersEntity: UsersEntity): Promise<any> {
         // Technically, usersData.hashedPassword here isn't hashed yet when it's sent through the form
-        console.log("hashedPassword: " + usersEntity.hashedPassword);
         var hash = AuthService.hashPasswordSync(usersEntity.hashedPassword);
-
-        console.log(hash);
-        var match = AuthService.compareSync(usersEntity.hashedPassword, hash);
-
         usersEntity.hashedPassword = hash;
-        console.log("usersData.hashedPassword is now" + hash);
 
         // Return everything but hashed password
         const createdUser = await this.usersRepository.save(usersEntity);

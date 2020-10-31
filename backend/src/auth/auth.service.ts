@@ -16,8 +16,9 @@ export class AuthService {
 
     async validateUser(username: string, password: string): Promise<any> {
         const user = await this.usersService.findByUsername(username);
+        const match = bcrypt.compareSync(password, user.hashedPassword);
 
-        if(user && user.hashedPassword === password) { // Will perform hash checking later
+        if(user && match) { 
             // Return everything but hashedPassword
             const { hashedPassword, ...result } = user;
             return result;
@@ -36,21 +37,6 @@ export class AuthService {
     }
 
     public static hashPasswordSync(password: string) {
-        console.log(password);
-        console.log(Number(process.env.HASHING_ROUNDS));
         return bcrypt.hashSync(password, Number(process.env.HASHING_ROUNDS));
-    }
-
-    public static compareSync(password: string, dbHash: string) {
-        console.log("CompareSync...");
-        if(bcrypt.compareSync(password, dbHash)){
-            console.log("Match!")
-            // Password matched
-            return true;
-        }
-        else {
-            console.log("Not match...")
-            return false;
-        }
     }
 }
