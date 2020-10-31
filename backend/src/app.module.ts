@@ -8,6 +8,7 @@ import { join } from 'path';
 import { Connection } from 'typeorm';
 import { UsersModule } from './users/users.module';
 import { EasyconfigModule } from 'nestjs-easyconfig';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { EasyconfigModule } from 'nestjs-easyconfig';
       insecureAuth: true,
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController, PostsController, CommentsController],
   providers: [AppService],
