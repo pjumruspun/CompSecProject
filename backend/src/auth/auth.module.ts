@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { EasyconfigModule } from 'nestjs-easyconfig';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
     imports: [
@@ -16,8 +17,8 @@ import { EasyconfigModule } from 'nestjs-easyconfig';
             signOptions: { expiresIn: '60s' },
         }),
     ],
-    providers: [AuthService, LocalStrategy],
+    providers: [AuthService, LocalStrategy, JwtStrategy],
     exports: [AuthService],
 })
 
-export class AuthModule { }
+export class AuthModule {}
