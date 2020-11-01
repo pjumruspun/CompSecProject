@@ -48,7 +48,7 @@ function App() {
       <Grid container spacing={5} >
         <Grid item xs>
           <Paper className={classes.paper}>
-            <div className={classes.headline} >PROFILE</div>
+            <div className={classes.headline} >USER</div>
             <div className={classes.profile}>
               Name : Park
             </div>
