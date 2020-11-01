@@ -1,4 +1,5 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { PostsEntity } from 'src/posts/posts.entity';
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class UsersEntity {
@@ -12,4 +13,10 @@ export class UsersEntity {
     @Column('boolean', { default: false, nullable: false})
     isModerator: boolean;
 
+    @OneToMany(
+        type => PostsEntity,
+        posts => posts.username,
+    )
+    posts: PostsEntity[];
+    
 }

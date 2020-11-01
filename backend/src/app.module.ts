@@ -9,6 +9,7 @@ import { Connection } from 'typeorm';
 import { UsersModule } from './users/users.module';
 import { EasyconfigModule } from 'nestjs-easyconfig';
 import { AuthModule } from './auth/auth.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     AuthModule,
+    PostsModule,
   ],
   controllers: [AppController, PostsController, CommentsController],
   providers: [AppService],
