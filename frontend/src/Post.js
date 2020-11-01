@@ -11,6 +11,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import TextField from '@material-ui/core/TextField';
+import AddCommentIcon from '@material-ui/icons/AddComment';
+import Comment from './Comment';
 
 const useStyles = makeStyles((theme) => ({
   post: {
@@ -23,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   },
   postHeader: {
     borderBottom: '1px solid black'
+  },
+  postData: {
+    padding: "16px 16px 4px 16px"
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -37,6 +43,27 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: "#47a779",
   },
+  commentWrap: {
+    paddingTop: "10px !important",
+    paddingBottom: "20px !important",
+    paddingLeft: "15px",
+    paddingRight: "50px",
+  },
+  comment: {
+    width: "80%",
+    paddingBottom: "5px",
+    verticalAlign: "middle",
+    marginRight: "10px"
+  },
+  form: {
+    flex: 'row',
+  },
+  input_text: {
+    backgroundColor: '#ffffff'
+  },
+  button: {
+    marginRight: '2px'
+  }
 }));
 
 export default function Post() {
@@ -64,9 +91,9 @@ export default function Post() {
         title="Park"
         subheader="September 14, 2016"
       />
-      <CardContent>
+      <CardContent className={classes.postData} >
         <Typography variant="body2" color="textPrimary" component="p">
-          Post1
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet elit ut est lacinia posuere vitae ac nisl. Nunc volutpat fermentum imperdiet. Integer vitae vestibulum ligula. Curabitur arcu quam, consectetur non laoreet a, lacinia
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -85,10 +112,18 @@ export default function Post() {
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>All comments</Typography>
+        <CardContent className={classes.commentWrap} >
+          <Comment />
+          <Comment />
+          <Comment />
         </CardContent>
       </Collapse>
+      <form className={classes.form} noValidate autoComplete="off">
+        <TextField className={classes.comment} id="outlined-basic" InputProps={{ classes: { input: classes.input_text } }} variant="filled" label="Enter your comment here!" />
+        <IconButton color="primary" aria-label="add to shopping cart">
+          <AddCommentIcon />
+        </IconButton>
+      </form>
     </Card>
   );
 }
