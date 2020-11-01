@@ -1,7 +1,8 @@
 version: "3.7"
 services:
-  app:
-    build: .
+
+  backend:
+    build: backend
     ports: 
       - "${BACKEND_SERVICE_PORT}:${BACKEND_SERVICE_PORT}"
     links:
@@ -9,7 +10,14 @@ services:
     depends_on:
       - db
     volumes:
-      - ./:/usr/src/app
+      - ./backend:/usr/src/app
+  
+  frontend:
+    build: frontend
+    ports: 
+      - 3000:3000
+    volumes:
+      - ./frontend:/usr/src/app
 
   db:
     image: mysql
