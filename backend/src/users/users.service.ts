@@ -13,4 +13,10 @@ export class UsersService {
     async findAll(): Promise<UsersEntity[]> {
         return await this.usersRepository.find();
     }
+
+    async findByUsername(username: string): Promise<UsersEntity> {
+        return await this.usersRepository.findOne({ username: username });
+    }
+
+    // Create, update, delete users: Do it through DB directly?
 }
