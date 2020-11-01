@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PostsEntity } from './posts.entity';
 import { PostsService } from './posts.service';
@@ -23,7 +23,11 @@ export class PostsController {
     @UseGuards(JwtAuthGuard)
     @Post('create')
     async create(@Request() req, @Body() postsData): Promise<any> {
-        console.log(postsData);
+        // Checking if the token of the post publisher associates with
+        // the username in the postsData form
+        if(req.user.username !== postsData.username) {
+            throw new UnauthorizedException();
+        }
         return this.postsService.create(postsData);
     }
 
