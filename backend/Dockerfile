@@ -12,4 +12,6 @@ COPY . .
 
 EXPOSE 3001
 
+RUN npm build
+
 CMD "npm" "start"

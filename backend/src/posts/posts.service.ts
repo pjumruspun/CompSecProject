@@ -14,6 +14,10 @@ export class PostsService {
         return await this.postsRepository.find();
     }
 
+    async findOne(postId: string): Promise<PostsEntity> {
+        return await this.postsRepository.findOne({ postId: postId });
+    }
+
     async create(postsEntity: PostsEntity): Promise<PostsEntity> {
         return await this.postsRepository.save(postsEntity);
     }
