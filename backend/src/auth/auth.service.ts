@@ -2,7 +2,7 @@ import { Injectable, Module } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { EasyconfigModule } from 'nestjs-easyconfig';
-import * as bcrypt from 'bcrypt';
+var bcrypt = require('bcryptjs')
 
 @Module({
     imports: [EasyconfigModule.register({ path: '.env' })],
