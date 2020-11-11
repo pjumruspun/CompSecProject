@@ -1,10 +1,11 @@
 version: "3.7"
+
 services:
 
   backend:
     build: backend
     ports: 
-      - "${BACKEND_SERVICE_PORT}:${BACKEND_SERVICE_PORT}"
+      - ${BACKEND_SERVICE_PORT}:${BACKEND_SERVICE_PORT}
     links:
       - db:mysql
     depends_on:
@@ -20,11 +21,13 @@ services:
       - ./frontend:/usr/src/app
 
   db:
+    env_file:
+      - ./backend/.env
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     container_name: "mysql"
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - ${DB_PORT}:${DB_PORT}
     environment: 
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_DATABASE: "${DB_NAME}"
