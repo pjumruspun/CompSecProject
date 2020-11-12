@@ -36,7 +36,7 @@ export class CommentsEntity {
             cascade: true,
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
-        }
+        },
     )
     post: PostsEntity;
     

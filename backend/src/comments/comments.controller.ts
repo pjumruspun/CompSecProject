@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { CommentsEntity } from './comments.entity';
 import { CommentsService } from './comments.service';
@@ -17,25 +18,27 @@ export class CommentsController {
     // Get one comment, by commentId
     // Permission: user or mod?
     // Not sure if this is needed at all
+    @UseGuards(JwtAuthGuard)
     @Get('findbyid/:id')
     async findOne(@Param('id') id: string): Promise<CommentsEntity> {
         return this.commentsService.findOne(id);
     }
 
     // Get all comments of one post, by postId
+    // Sorted by old to new
     // Permission: user or mod
-    @Get('findbypostid/:id')
-    async findByPostId(@Param('postId') postId: string): Promise<CommentsEntity[]> {
-        const allPosts = await this.commentsService.findAll();
-        // Do something
-        return allPosts; // Change to something else later
+    @Get('findbypostid/:postid')
+    async findByPostId(@Param('postid') postId: string): Promise<CommentsEntity[]> {
+        return this.commentsService.findByPostId(postId); // Change to something else later
     }
 
     // Create a comment
     // Permission: user or mod
+    @UseGuards(JwtAuthGuard)
     @Post('create')
     async create(@Request() req, @Body() commentsData): Promise<CommentsEntity> {
-        // To be implemented
+        // Get username using token
+        commentsData.username = req.user.username;
         return this.commentsService.create(commentsData);
     }
 

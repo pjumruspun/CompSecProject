@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PostsEntity } from 'src/posts/posts.entity';
 import { DeleteResult, EntityRepository, Repository, UpdateResult } from 'typeorm';
 import { CommentsEntity } from './comments.entity';
 
@@ -18,6 +19,20 @@ export class CommentsService {
 
     async findOne(commentId: string): Promise<CommentsEntity> {
         return await this.commentsRepository.findOne({ commentId: commentId });
+    }
+
+    async findByPostId(x: string): Promise<CommentsEntity[]> {
+        var allComments = await this.commentsRepository.find();
+        var result = [];
+        allComments.forEach(comment => {
+            if(String(comment.post) == x) {
+                result.push(comment);
+            }
+        });
+
+        // Sort from old to new
+        const sorted = result.slice().sort((a, b) => a.publishedTime - b.publishedTime)
+        return sorted;
     }
 
     async create(commentsEntity: CommentsEntity): Promise<CommentsEntity> {
