@@ -51,7 +51,7 @@ export class CommentsController {
     @Put('update')
     async update(@Request() req, @Body() commentsData): Promise<UpdateResult> {
         // Can update only if the sender is a mod
-        // Or is an owner of the comment
+        // Or is the owner of the comment
         // Otherwise throw 401
         const hasValidOwner = await this.commentsService.isOwnedBy(commentsData.commentId, req.user.username)
         if(!req.user.isModerator && !hasValidOwner) {
@@ -66,9 +66,18 @@ export class CommentsController {
     // Permission:
     // Users can only delete own's comments,
     // while mods can delete anyone's
+    @UseGuards(JwtAuthGuard)
     @Delete('delete/:id')
     async delete(@Request() req, @Param('id') id: string): Promise<DeleteResult> {
-        // To be implemented
+        // Can delete only if the sender is a mod
+        // Or is the owner of the comment
+        // Otherwise throw 401
+
+        const hasValidOwner = await this.commentsService.isOwnedBy(id, req.user.username)
+        if(!req.user.isModerator && !hasValidOwner) {
+            throw new UnauthorizedException();
+        }
+
         return this.commentsService.delete(id);
     }
 }
