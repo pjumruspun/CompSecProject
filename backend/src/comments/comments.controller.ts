@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Request, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { CommentsEntity } from './comments.entity';
@@ -27,9 +27,10 @@ export class CommentsController {
     // Get all comments of one post, by postId
     // Sorted by old to new
     // Permission: user or mod
+    @UseGuards(JwtAuthGuard)
     @Get('findbypostid/:postid')
     async findByPostId(@Param('postid') postId: string): Promise<CommentsEntity[]> {
-        return this.commentsService.findByPostId(postId); // Change to something else later
+        return this.commentsService.findByPostId(postId);
     }
 
     // Create a comment
@@ -46,9 +47,18 @@ export class CommentsController {
     // Permission:
     // Users can only edit own's comments,
     // while mods can edit anyone's
+    @UseGuards(JwtAuthGuard)
     @Put('update')
     async update(@Request() req, @Body() commentsData): Promise<UpdateResult> {
-        // To be implemented
+        // Can update only if the sender is a mod
+        // Or is an owner of the comment
+        // Otherwise throw 401
+        const hasValidOwner = await this.commentsService.isOwnedBy(commentsData.commentId, req.user.username)
+        if(!req.user.isModerator && !hasValidOwner) {
+            throw new UnauthorizedException();
+        }
+
+        commentsData.username = (await this.commentsService.findOne(commentsData.commentId)).username;
         return this.commentsService.update(commentsData);
     }
 
