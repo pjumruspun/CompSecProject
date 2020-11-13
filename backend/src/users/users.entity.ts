@@ -1,3 +1,4 @@
+import { CommentsEntity } from 'src/comments/comments.entity';
 import { PostsEntity } from 'src/posts/posts.entity';
 import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 
@@ -18,5 +19,11 @@ export class UsersEntity {
         posts => posts.username,
     )
     posts: PostsEntity[];
+
+    @OneToMany(
+        type => CommentsEntity,
+        comments => comments.commentId,
+    )
+    comments: CommentsEntity[];
     
 }

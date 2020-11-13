@@ -45,6 +45,7 @@ export class PostsController {
         // Or is an owner of the post
         // Otherwise throw 401
         const hasValidOwner = await this.postsService.isOwnedBy(postsData.postId, postsData.username);
+        // Change postsData.username to req.user.username?
         if(!req.user.isModerator && !hasValidOwner) {
             throw new UnauthorizedException();
         }
