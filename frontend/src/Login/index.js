@@ -62,7 +62,7 @@ function Login() {
   // console.log(process.env)
 
   const onSubmitSuccess = () => {
-    history.push("/")
+    history.push("/home")
   }
 
   const login = () =>
