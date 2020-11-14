@@ -35,13 +35,13 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const [cookies, setCookie] = useCookies();
+  // const [cookies, setCookie] = useCookies();
 
-  useEffect(() => {
-    // if(cookies.token === undefined) {
-    //   window.location.assign('/login');
-    // }
-  }, []);
+  // useEffect(() => {
+  //   if(cookies.token === undefined) {
+  //     window.location.assign('/login');
+  //   }
+  // }, []);
 
   return (
     <div className={classes.root}>
