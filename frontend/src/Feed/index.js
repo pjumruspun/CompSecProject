@@ -1,9 +1,10 @@
 import { useCookies } from 'react-cookie';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Post from './Post';
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,9 +34,32 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function App() {
-  // ALREADY MOVE THIS COMPOENTS TO  --> FEED <--
+function Feed() {
   const classes = useStyles();
+  const [user,setUser] = useState();
+  const [cookie,setCookie] = useCookies();
+  const authenHeader = {
+    Authorization : `Bearer ${cookie.token}`
+  }
+
+  const getProfile = () => 
+  new Promise((resolve,reject)=>{
+    axios.get(`http://localhost:3001/profile`,{headers:authenHeader})
+    .then((res)=>{
+      resolve(res.data)
+    }).catch((err)=>{
+      reject(err)
+    })
+  })
+
+  useEffect( async ()=>{
+    try {
+      const user = await getProfile()
+      if (user.username) setUser(user)
+    } catch(err) {
+      console.log(err)
+    }
+  },[])
 
   return (
     <div className={classes.root}>
@@ -44,7 +68,7 @@ function App() {
           <Paper className={classes.paper}>
             <div className={classes.headline} >USER</div>
             <div className={classes.profile}>
-              Name : Park
+              {`Name : ${user&&user.username}`}
             </div>
           </Paper>
         </Grid>
@@ -61,4 +85,4 @@ function App() {
   );
 }
 
-export default App;
+export default Feed;

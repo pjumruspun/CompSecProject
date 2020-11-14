@@ -1,9 +1,10 @@
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import App from './App';
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
+import Feed from './Feed';
 import { CookiesProvider } from 'react-cookie';
-import Login from './Login';
-import Post from './Post';
-import Comment from './Comment';
+import Signin from './Signin';
+import Post from './Feed/Post';
+import Comment from './Feed/Comment';
+import AuthGuard from './AuthGuard'
 
 function Routes() {
     return (
@@ -11,10 +12,14 @@ function Routes() {
             <CookiesProvider>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/" component={App} />
-                        <Route exact path="/login" component={Login} />
-                        <Route exact path="/demoPost" component={Post} />
-                        <Route exact path="/demoComment" component={Comment} />
+                        <Route exact path="/login" component={Signin} />
+                        <Route exact path="/" component={() =><Redirect to="/home"/>} />
+                        {/* AuthGuard will prevent render these below components before authenticated */}
+                        <AuthGuard>
+                            <Route exact path="/home" component={Feed} />
+                            <Route exact path="/demoPost" component={Post} />
+                            <Route exact path="/demoComment" component={Comment} />
+                        </AuthGuard>
                     </Switch>
                 </BrowserRouter>
             </CookiesProvider>
