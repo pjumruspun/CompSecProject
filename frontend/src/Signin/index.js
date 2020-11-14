@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Grid,
   TextField,
@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core'
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
+import RegisConfirmDialog from './RegisConfirmDialog'
 
 const useStyles = makeStyles((theme)=>({
   root : {
@@ -53,11 +54,13 @@ function setCookie(name,value,minutes) {
   document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 
-function Login() {
+function Signin() {
   const classes = useStyles()
   const [username,setUsername] = useState()
   const [password,setPassword] = useState()
   const [submitEnable,setSubmitEnable] = useState(true)
+  const [openConfirm,setOpenConfirm] = useState(false)
+  const [accountInvalid,setAccountInvalid] = useState(false)
   const history = useHistory()
 
   // console.log(process.env)
@@ -102,29 +105,56 @@ function Login() {
       }
   })
 
-  const onSignIn = async () => {
-    console.log("sign in")
-    setSubmitEnable(false)
-    try {
-      let response = await login()
-      const { access_token } = response
-      if (access_token) {
-        setCookie("token",access_token,5)
-        onSubmitSuccess()
-      }
-    } catch(err) {
-      console.log(err)
+  const confirmRegis = () => {
+    setOpenConfirm(true)
+  }
+
+  const handleClose = () => {
+    setOpenConfirm(false)
+  }
+
+  const handleConfirm = async (confirm) => {
+    if (confirm) {
       let response = await regis()
       if (response.username === username) {
         const { access_token } = await login()
-        // console.log("resis success")
         if (access_token) { 
           setCookie("token",access_token,5)
           onSubmitSuccess()
         }
       }
+    }  else {
+      setSubmitEnable(true)
     }
   }
+
+  const onSignIn = async () => {
+    if (submitEnable) {
+      setSubmitEnable(false)
+      try {
+        let response = await login()
+        console.log(response)
+        const { access_token } = response
+        if (access_token) {
+          setCookie("token",access_token,5)
+          onSubmitSuccess()
+        }
+      } catch(err) {
+        if (err.response.status === 401) {
+          //wrong password
+          setAccountInvalid(true)
+        }
+        if (err.response.status === 500) {
+          confirmRegis()
+        }
+      }
+    }
+  }
+
+  useEffect(()=>{
+    setSubmitEnable(true)
+    setAccountInvalid(false)
+  },[username,password])
 
   return (
     <Grid className={classes.root} container justify="center" alignItems="center">
@@ -142,14 +172,16 @@ function Login() {
           }}
           onChange={(e)=>setPassword(e.target.value)}
           value={password||""}
+          error={accountInvalid}
         ></TextField>
         <Button fullWidth className={classes.submitButton}
           onClick={()=>onSignIn()}
           disabled={!submitEnable}
         >Submit</Button>
       </Grid>
+      <RegisConfirmDialog open={openConfirm} handleClose={handleClose} handleConfirm={handleConfirm}/>
     </Grid>
   );
 }
 
-export default Login;
+export default Signin;

@@ -1,7 +1,7 @@
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import Feed from './Feed';
 import { CookiesProvider } from 'react-cookie';
-import Login from './Login';
+import Signin from './Signin';
 import Post from './Feed/Post';
 import Comment from './Feed/Comment';
 import AuthGuard from './AuthGuard'
@@ -12,7 +12,7 @@ function Routes() {
             <CookiesProvider>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/login" component={Login} />
+                        <Route exact path="/login" component={Signin} />
                         <Route exact path="/" component={() =><Redirect to="/home"/>} />
                         {/* AuthGuard will prevent render these below components before authenticated */}
                         <AuthGuard>
