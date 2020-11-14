@@ -57,11 +57,13 @@ function Login() {
   const classes = useStyles()
   const [username,setUsername] = useState()
   const [password,setPassword] = useState()
+  const [submitEnable,setSubmitEnable] = useState(true)
   const history = useHistory()
 
   // console.log(process.env)
 
   const onSubmitSuccess = () => {
+    setSubmitEnable(true)
     history.push("/home")
   }
 
@@ -102,6 +104,7 @@ function Login() {
 
   const onSignIn = async () => {
     console.log("sign in")
+    setSubmitEnable(false)
     try {
       let response = await login()
       const { access_token } = response
@@ -142,6 +145,7 @@ function Login() {
         ></TextField>
         <Button fullWidth className={classes.submitButton}
           onClick={()=>onSignIn()}
+          disabled={!submitEnable}
         >Submit</Button>
       </Grid>
     </Grid>
