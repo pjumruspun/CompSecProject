@@ -5,6 +5,8 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Post from './Post';
 import axios from 'axios'
+import config from '../config'
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,13 +40,14 @@ function Feed() {
   const classes = useStyles();
   const [user,setUser] = useState();
   const [cookie,setCookie] = useCookies();
+  const [feed,setFeed] = useState([]);
   const authenHeader = {
     Authorization : `Bearer ${cookie.token}`
   }
 
   const getProfile = () => 
   new Promise((resolve,reject)=>{
-    axios.get(`http://localhost:3001/profile`,{headers:authenHeader})
+    axios.get(`${config.BACKEND_ENDPOINT}/profile`,{headers:authenHeader})
     .then((res)=>{
       resolve(res.data)
     }).catch((err)=>{
@@ -52,10 +55,36 @@ function Feed() {
     })
   })
 
+  const getAllPost = () =>
+  new Promise((resolve,reject)=>{
+    axios.get(`${config.BACKEND_ENDPOINT}/posts`,{headers:authenHeader})
+    .then((res)=>{
+      resolve(res.data)
+    }).catch((err)=>{
+      reject(err.response)
+    })
+  })
+
+  const createPost = (content) =>
+  new Promise((resolve,reject)=>{
+    let body = {
+      content : "hello world",
+    }
+    axios.post(`${config.BACKEND_ENDPOINT}/posts/create`,body,{headers:authenHeader})
+    .then((res)=>{
+      resolve(res.data)
+    }).catch((err)=>{
+      reject(err.response)
+    })
+  })
+
   useEffect( async ()=>{
     try {
       const user = await getProfile()
       if (user.username) setUser(user)
+      const feed = await getAllPost()
+      console.log(feed)
+      if (feed) setFeed(feed)
     } catch(err) {
       console.log(err)
     }
@@ -75,12 +104,16 @@ function Feed() {
         <Grid item xs={9}>
           <Paper className={classes.paper}>
           <div className={classes.headline} >ALL POSTS</div>
+          {/* <Post />
           <Post />
-          <Post />
-          <Post />
+          <Post /> */}
+          {feed.map((post)=>(
+            <Post post={post}/>
+          ))}
           </Paper>
         </Grid>
       </Grid>
+      <Button onClick={()=>{createPost()}}>demo new post</Button>
     </div>
   );
 }

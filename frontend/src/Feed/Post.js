@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -66,10 +66,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Post() {
+export default function Post({post}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const {content, postId, publishedTime, username} = {...post,publishedTime:`${new Date(post.publishedTime).toDateString()} ${new Date(post.publishedTime).toLocaleTimeString()}`}
 
+  useEffect(()=>{
+    console.log(content, postId, publishedTime, username)
+  },[post])
+  
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -80,7 +85,7 @@ export default function Post() {
         className={classes.postHeader}
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            P
+            {username?username[0].toUpperCase():"?"}
           </Avatar>
         }
         action={
@@ -88,12 +93,12 @@ export default function Post() {
             <MoreVertIcon />
           </IconButton>
         }
-        title="Park"
-        subheader="September 14, 2016"
+        title={username}
+        subheader={publishedTime}
       />
       <CardContent className={classes.postData} >
         <Typography variant="body2" color="textPrimary" component="p">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet elit ut est lacinia posuere vitae ac nisl. Nunc volutpat fermentum imperdiet. Integer vitae vestibulum ligula. Curabitur arcu quam, consectetur non laoreet a, lacinia
+        {content}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
