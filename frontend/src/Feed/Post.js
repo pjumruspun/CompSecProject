@@ -19,7 +19,9 @@ import axios from 'axios';
 import { Menu,
   MenuItem,
   Snackbar,
+  InputAdornment,
 } from '@material-ui/core'
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 
 const useStyles = makeStyles((theme) => ({
   post: {
@@ -115,6 +117,15 @@ export default function Post({post, authenHeader, username:signedUsername, refet
     setOpenNoti(true)
   }
 
+  const refetchComment = async () => {
+    try {
+      const commentsList = await getComments()
+      setCommentList(commentsList)
+    } catch (err) {
+
+    }
+  }
+
   const getComments = () =>
   new Promise((resolve,reject)=>{
     axios.get(`${config.BACKEND_ENDPOINT}/comments/findbypostid/${postId}`,authenHeader)
@@ -182,12 +193,16 @@ export default function Post({post, authenHeader, username:signedUsername, refet
       },100)
     }
   }
-  const postComment = async (e) => {
+  const handlePostComment = async (e) => {
     e.preventDefault()
     try {
       const response = await createComment()
       console.log(response)
-      if (response.post === postId) setComment("")
+      if (response.post === postId) {
+        setComment("")
+        setExpanded(true)
+        refetchComment()
+      }
     } catch(err) {
       console.log(err)
     }
@@ -294,6 +309,11 @@ export default function Post({post, authenHeader, username:signedUsername, refet
               handleEditPost()
             }
           }}
+          fullWidth
+          multiline
+          InputProps={{
+            endAdornment: <InputAdornment position="start"><KeyboardReturnIcon/></InputAdornment>,
+          }}
           />
         }
       </CardContent>
@@ -323,7 +343,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
           ))}
         </CardContent>
       </Collapse>
-      <form className={classes.form} noValidate onSubmit={postComment} autoComplete="off">
+      <form className={classes.form} noValidate onSubmit={handlePostComment} autoComplete="off">
         <TextField 
           className={classes.comment} 
           id="outlined-basic" 
@@ -334,7 +354,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
           value={comment}
           onKeyPress={(e)=>{
             if (e.key==="Enter") {
-              // postComment()
+              // handlePostComment()
               console.log(comment)
             }
           }}
