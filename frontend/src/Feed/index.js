@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Feed() {
   const classes = useStyles();
-  const [user,setUser] = useState();
+  const [user,setUser] = useState(); //{username,isModerator}
   const [cookie,setCookie] = useCookies();
   const [feed,setFeed] = useState([]);
   const authenHeader = {
@@ -68,6 +68,16 @@ function Feed() {
     })
   })
 
+  const refetchPost = async () => {
+    try {
+      const feed = await getAllPost()
+      if (feed) setFeed(feed)
+    } catch(err) {
+
+    }
+  }
+
+
   const createPost = (content) =>
   new Promise((resolve,reject)=>{
     let body = {
@@ -86,7 +96,7 @@ function Feed() {
       const user = await getProfile()
       if (user.username) setUser(user)
       const feed = await getAllPost()
-      console.log(feed)
+      // console.log(feed)
       if (feed) setFeed(feed)
     } catch(err) {
       console.log(err)
@@ -111,7 +121,7 @@ function Feed() {
           <Post />
           <Post /> */}
           {feed.map((post)=>(
-            <Post post={post} authenHeader={authenHeader}/>
+            <Post post={post} authenHeader={authenHeader} username={user.username||""} refetchPost={refetchPost}/>
           ))}
           </Paper>
         </Grid>

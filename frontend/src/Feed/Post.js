@@ -72,7 +72,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Post({post, authenHeader}) {
+var edittedContent = ""
+
+export default function Post({post, authenHeader, username:signedUsername, refetchPost}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [comment,setComment] = useState("")
@@ -80,6 +82,8 @@ export default function Post({post, authenHeader}) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [openNoti,setOpenNoti] = useState(false)
   const [messageNoti,setMessageNoti] = useState("")
+  const [postEditing,setPostEditing] = useState(false)
+  const [PostContentComp,setPostContentComp] = useState(Typography)
 
   const date = new Date(post.publishedTime)
   const {content, postId, publishedTime, username} = {...post,publishedTime:`${date.toDateString()} ${date.toLocaleTimeString()}`}
@@ -89,6 +93,14 @@ export default function Post({post, authenHeader}) {
     setCommentList(commentsList)
     console.log(commentsList)
   },[post])
+
+  useEffect(()=>{
+    if (postEditing) {
+      setPostContentComp(TextField)
+    } else {
+      setPostContentComp(Typography)
+    }
+  },[postEditing])
   
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -96,6 +108,11 @@ export default function Post({post, authenHeader}) {
 
   const handleCloseNoti = () => {
     setOpenNoti(false)
+  }
+
+  const setNotification = (message,type) => {
+    setMessageNoti(message)
+    setOpenNoti(true)
   }
 
   const getComments = () =>
@@ -136,10 +153,35 @@ export default function Post({post, authenHeader}) {
     })
   })
 
+  const editPost = () =>
+  new Promise((resolve,reject)=>{
+    let body = {
+      postId : postId,
+      content : edittedContent,
+      username : signedUsername,
+    }
+    axios.put(`${config.BACKEND_ENDPOINT}/posts/update`,body,authenHeader)
+    .then((res)=>{
+      resolve(res.data)
+    })
+    .catch((err)=>{
+      reject(err.response)
+    })
+  })
+
   const handleComment = (value) => {
     setComment(value)
   }
 
+  const onEditPost = () => {
+    if (signedUsername === username) {
+      setPostEditing(true)
+    } else {
+      setTimeout(()=>{
+        setNotification("เจ้าของ post เท่านั้นจึงจะมีสิทธิ์แก้ไข post")
+      },100)
+    }
+  }
   const postComment = async (e) => {
     e.preventDefault()
     try {
@@ -155,16 +197,36 @@ export default function Post({post, authenHeader}) {
     try {
       const response = await deletePost()
       if (response.affected > 0) {
-        setOpenNoti(true)
-        setMessageNoti("ลบ post สำเร็จ")
+        setNotification("ลบ Post สำเร็จ")
       }
       else {
-        setOpenNoti(true)
-        setMessageNoti("คุณไม่มีสิทธิ์ในการลบ post นี้")
+        setNotification("ลบ Post ไม่สำเร็จ")
       }
     } catch(err) {
-      setOpenNoti(true)
-      setMessageNoti("คุณไม่มีสิทธิ์ในการลบ post นี้")
+      if (err.status === 401) {
+        setNotification("เจ้าของ post เท่านั้นที่จะมีสิทธิ์ลบ post นี้")
+      }
+      if (err.status === 404) {
+        setNotification("กรุณาตรวจสอบการเชื่อมต่อ")
+      }
+    }
+  }
+
+  const handleEditPost = async () => {
+    try {
+      const response = await editPost()
+      // console.log(response)
+      if (response.affected > 0) {
+        setNotification("แก้ไข post สำเร็จ")
+        setPostEditing(false)
+        refetchPost()
+      } else {
+        setNotification("แก้ไข post ไม่สำเร็จ")
+      }
+    } catch(err) {
+      console.log(err)
+      if (err.status === 401) setNotification("เจ้าของ post เท่านั้นที่จะมีสิทธิ์แก้ไข post นี้")
+      if (err.status === 404) setNotification("โปรดตรวจสอบการเชื่อมต่อ")
     }
   }
 
@@ -184,8 +246,8 @@ export default function Post({post, authenHeader}) {
       open={Boolean(anchorEl)}
       onClose={closeMenu}
     >
-      <MenuItem>edit</MenuItem>
-      <MenuItem onClick={()=>handleDeletePost()}>delete</MenuItem>
+      <MenuItem onClick={()=>{onEditPost();closeMenu()}}>edit</MenuItem>
+      <MenuItem onClick={()=>{handleDeletePost();closeMenu()}}>delete</MenuItem>
     </Menu>
   )
 
@@ -196,7 +258,7 @@ export default function Post({post, authenHeader}) {
       horizontal: 'left',
     }}
     open={openNoti}
-    autoHideDuration={6000}
+    autoHideDuration={3000}
     onClose={handleCloseNoti}
     message={messageNoti}
     >
@@ -221,9 +283,19 @@ export default function Post({post, authenHeader}) {
         subheader={publishedTime}
       />
       <CardContent className={classes.postData} >
-        <Typography variant="body2" color="textPrimary" component="p">
+        {!postEditing?<Typography variant={postEditing?"outlined":"body2"} color="textPrimary" component="p">
         {content}
-        </Typography>
+        </Typography>:
+        <TextField variant="outlined" defaultValue={content} size="small"
+          onChange={(e)=>{edittedContent=e.target.value}}
+          onKeyPress={(e)=>{
+            if (e.key === "Enter") {
+              console.log(edittedContent)
+              handleEditPost()
+            }
+          }}
+          />
+        }
       </CardContent>
       <CardActions disableSpacing>
         <Typography variant="body2" color="textSecondary" component="p">
