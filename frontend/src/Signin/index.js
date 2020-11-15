@@ -9,6 +9,7 @@ import {
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import RegisConfirmDialog from './RegisConfirmDialog'
+import config from '../config'
 
 const useStyles = makeStyles((theme)=>({
   root : {
@@ -54,6 +55,8 @@ function setCookie(name,value,minutes) {
   document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 
+console.log(process.env)
+
 function Signin() {
   const classes = useStyles()
   const [username,setUsername] = useState()
@@ -61,6 +64,7 @@ function Signin() {
   const [submitEnable,setSubmitEnable] = useState(true)
   const [openConfirm,setOpenConfirm] = useState(false)
   const [accountInvalid,setAccountInvalid] = useState(false)
+  const [helperText,setHelperText] = useState("")
   const history = useHistory()
 
   // console.log(process.env)
@@ -77,7 +81,7 @@ function Signin() {
       username : username,
       password : password,
     }
-    axios.post(`http://localhost:3001/auth/login`,body).then((res)=>{
+    axios.post(`${config.BACKEND_ENDPOINT}/auth/login`,body).then((res)=>{
       resolve(res.data)
     }).catch((err)=>{
       reject(err)
@@ -95,7 +99,7 @@ function Signin() {
         hashedPassword : password,
         isModerator : false,
       }
-      axios.post(`http://localhost:3001/users/create`,body).then((res)=>{
+      axios.post(`${config.BACKEND_ENDPOINT}/users/create`,body).then((res)=>{
         resolve(res.data)
       }).catch((err)=>{
         reject(err)
@@ -143,9 +147,13 @@ function Signin() {
         if (err.response.status === 401) {
           //wrong password
           setAccountInvalid(true)
+          setHelperText("password wrong")
         }
         if (err.response.status === 500) {
           confirmRegis()
+        }
+        if (err.response.status === 404) {
+          setHelperText("lose connection")
         }
       }
     }
@@ -154,6 +162,7 @@ function Signin() {
   useEffect(()=>{
     setSubmitEnable(true)
     setAccountInvalid(false)
+    setHelperText("")
   },[username,password])
 
   return (
@@ -173,6 +182,7 @@ function Signin() {
           onChange={(e)=>setPassword(e.target.value)}
           value={password||""}
           error={accountInvalid}
+          helperText={helperText}
         ></TextField>
         <Button fullWidth className={classes.submitButton}
           onClick={()=>onSignIn()}
