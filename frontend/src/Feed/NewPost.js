@@ -32,15 +32,15 @@ var content
 
 function NewPost({username,content,handleContent,onPost}) {
   const classes = useStyles()
-
   return (
     <Grid className={classes.post} >
       <Grid container>
-        <Avatar className={classes.avatar}>T</Avatar>
+  <Avatar className={classes.avatar}>{username ? username[0].toUpperCase():"?"}</Avatar>
           <TextField
-            fullWidth
+            // fullWidth
             variant="outlined"
             value={content}
+            multiline
             onChange={(e)=>handleContent(e.target.value)}
             placeholder={`คุณคิดอะไรอยู่ ${username}`}
             className={classes.textField}

@@ -180,6 +180,7 @@ function Signin() {
             }
           }}
           onChange={(e)=>setPassword(e.target.value)}
+          type="password"
           value={password||""}
           error={accountInvalid}
           helperText={helperText}

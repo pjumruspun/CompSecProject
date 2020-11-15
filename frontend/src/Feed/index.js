@@ -121,6 +121,12 @@ function Feed() {
     }
   },[])
 
+  useEffect(()=>{
+    window.setInterval(function(){
+      refetchPost()
+    }, 5000);
+  },[])
+
   return (
     <div className={classes.root}>
       <Grid container spacing={5} >
