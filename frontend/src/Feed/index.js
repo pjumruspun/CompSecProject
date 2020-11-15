@@ -7,6 +7,7 @@ import Post from './Post';
 import axios from 'axios'
 import config from '../config'
 import Button from '@material-ui/core/Button';
+import NewPost from './NewPost'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +42,7 @@ function Feed() {
   const [user,setUser] = useState(); //{username,isModerator}
   const [cookie,setCookie] = useCookies();
   const [feed,setFeed] = useState([]);
+  const [content,setContent] = useState("");
   const authenHeader = {
     headers : {
       Authorization : `Bearer ${cookie.token}`
@@ -77,11 +79,15 @@ function Feed() {
     }
   }
 
+  const handleContent = (content) => {
+    setContent(content)
+  }
 
-  const createPost = (content) =>
+
+  const createPost = () =>
   new Promise((resolve,reject)=>{
     let body = {
-      content : "hello world",
+      content : content,
     }
     axios.post(`${config.BACKEND_ENDPOINT}/posts/create`,body,authenHeader)
     .then((res)=>{
@@ -90,6 +96,18 @@ function Feed() {
       reject(err.response)
     })
   })
+
+  const handlePost = async () => {
+    try {
+      const response = await createPost()
+      if (response.username === user.username) {
+        setContent("")
+        refetchPost()
+      }
+    } catch (err) {
+
+    }
+  }
 
   useEffect( async ()=>{
     try {
@@ -120,13 +138,13 @@ function Feed() {
           {/* <Post />
           <Post />
           <Post /> */}
+          <NewPost username={user?user.username:""} content={content} handleContent={handleContent} onPost={handlePost}/>
           {feed.map((post)=>(
             <Post post={post} authenHeader={authenHeader} username={user.username||""} refetchPost={refetchPost}/>
           ))}
           </Paper>
         </Grid>
       </Grid>
-      <Button onClick={()=>{createPost()}}>demo new post</Button>
     </div>
   );
 }

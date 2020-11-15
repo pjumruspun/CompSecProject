@@ -213,6 +213,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
       const response = await deletePost()
       if (response.affected > 0) {
         setNotification("ลบ Post สำเร็จ")
+        refetchPost()
       }
       else {
         setNotification("ลบ Post ไม่สำเร็จ")
