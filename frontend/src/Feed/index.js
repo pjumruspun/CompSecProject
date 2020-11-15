@@ -42,12 +42,15 @@ function Feed() {
   const [cookie,setCookie] = useCookies();
   const [feed,setFeed] = useState([]);
   const authenHeader = {
-    Authorization : `Bearer ${cookie.token}`
+    headers : {
+      Authorization : `Bearer ${cookie.token}`
+    }
   }
+
 
   const getProfile = () => 
   new Promise((resolve,reject)=>{
-    axios.get(`${config.BACKEND_ENDPOINT}/profile`,{headers:authenHeader})
+    axios.get(`${config.BACKEND_ENDPOINT}/profile`,authenHeader)
     .then((res)=>{
       resolve(res.data)
     }).catch((err)=>{
@@ -57,7 +60,7 @@ function Feed() {
 
   const getAllPost = () =>
   new Promise((resolve,reject)=>{
-    axios.get(`${config.BACKEND_ENDPOINT}/posts`,{headers:authenHeader})
+    axios.get(`${config.BACKEND_ENDPOINT}/posts`,authenHeader)
     .then((res)=>{
       resolve(res.data)
     }).catch((err)=>{
@@ -70,7 +73,7 @@ function Feed() {
     let body = {
       content : "hello world",
     }
-    axios.post(`${config.BACKEND_ENDPOINT}/posts/create`,body,{headers:authenHeader})
+    axios.post(`${config.BACKEND_ENDPOINT}/posts/create`,body,authenHeader)
     .then((res)=>{
       resolve(res.data)
     }).catch((err)=>{
@@ -108,7 +111,7 @@ function Feed() {
           <Post />
           <Post /> */}
           {feed.map((post)=>(
-            <Post post={post}/>
+            <Post post={post} authenHeader={authenHeader}/>
           ))}
           </Paper>
         </Grid>

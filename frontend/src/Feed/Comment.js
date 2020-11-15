@@ -24,21 +24,22 @@ const useStyles = makeStyles({
     }
 });
 
-export default function Comment() {
+export default function Comment({comment}) {
     const classes = useStyles();
+    const date = new Date(comment.publishedTime)
+    const { commentId, content, post, publishedTime, username } = {...comment,publishedTime:`${date.toDateString()} ${date.toLocaleTimeString()}`}
     return (
         <Card className={classes.root}>
             <CardActionArea>
                 <CardContent>
                     <div className={classes.header}>
                         <Typography gutterBottom >
-                            Lizard
+                            {username}
                         </Typography>
-                        <Typography className={classes.time} color="textSecondary" >14:30 (11/11/2020)</Typography>
+                        <Typography className={classes.time} color="textSecondary" >{publishedTime}</Typography>
                     </div>
                     <Typography variant="body2" color="textPrimary" component="p">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                        across all continents except Antarctica
+                        {content}
                     </Typography>
                 </CardContent>
             </CardActionArea>
