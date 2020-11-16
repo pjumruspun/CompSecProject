@@ -381,8 +381,8 @@ export default function Post({post, authenHeader, username:signedUsername, refet
             }
           }}
         />
-        <IconButton color="primary" aria-label="add to shopping cart">
-          <AddCommentIcon />
+        <IconButton color="primary" aria-label="add to shopping cart"  onClick={handlePostComment}>
+          <AddCommentIcon/>
         </IconButton>
       </form>
       {menuRender()}
