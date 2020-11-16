@@ -91,9 +91,15 @@ export default function Post({post, authenHeader, username:signedUsername, refet
   const {content, postId, publishedTime, username} = {...post,publishedTime:`${date.toDateString()} ${date.toLocaleTimeString()}`}
 
   useEffect( async ()=>{
-    const commentsList = await getComments()
-    setCommentList(commentsList)
-    console.log(commentsList)
+    try {
+      const commentsList = await getComments()
+      setCommentList(commentsList)
+    } catch(err) {
+      if (err.response.status === 401) {
+        return window.location=`${window.location.hostname}/login`
+      }
+    }
+    
   },[post])
 
   useEffect(()=>{
@@ -133,7 +139,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
       resolve(res.data)
     })
     .catch((err)=>{
-      reject(err.response)
+      reject(err)
     })
   })
 
@@ -282,7 +288,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
     </Snackbar>
   )
   return (
-    <Card className={classes.post} >
+    <Card className={classes.post} key={`post-${publishedTime}`}>
       <CardHeader
         className={classes.postHeader}
         avatar={

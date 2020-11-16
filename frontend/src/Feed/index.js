@@ -8,6 +8,7 @@ import axios from 'axios'
 import config from '../config'
 import Button from '@material-ui/core/Button';
 import NewPost from './NewPost'
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,17 +38,34 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+function getCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
 function Feed() {
   const classes = useStyles();
   const [user,setUser] = useState(); //{username,isModerator}
   const [cookie,setCookie] = useCookies();
   const [feed,setFeed] = useState([]);
   const [content,setContent] = useState("");
+
+  // const getCookie = () =>{
+  //   return cookie.token
+  // }
+
   const authenHeader = {
     headers : {
-      Authorization : `Bearer ${cookie.token}`
+      Authorization : `Bearer ${getCookie("token")}`
     }
   }
+
 
 
   const getProfile = () => 
@@ -66,7 +84,7 @@ function Feed() {
     .then((res)=>{
       resolve(res.data)
     }).catch((err)=>{
-      reject(err.response)
+      reject(err)
     })
   })
 
@@ -75,7 +93,12 @@ function Feed() {
       const feed = await getAllPost()
       if (feed) setFeed(feed)
     } catch(err) {
-
+      if (err.response) {
+        if (err.response.status === 401) {
+          console.log("401")
+          return window.location=`${window.location.hostname}/login`
+        }
+      }
     }
   }
 
@@ -145,8 +168,8 @@ function Feed() {
           <Post />
           <Post /> */}
           <NewPost username={user?user.username:""} content={content} handleContent={handleContent} onPost={handlePost}/>
-          {feed.map((post)=>(
-            <Post post={post} authenHeader={authenHeader} username={user.username||""} refetchPost={refetchPost}/>
+          {feed.map((post,i)=>(
+            <Post post={post} authenHeader={authenHeader} username={user.username||""} refetchPost={refetchPost} key={`feed-${i}`}/>
           ))}
           </Paper>
         </Grid>

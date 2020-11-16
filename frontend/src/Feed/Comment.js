@@ -29,7 +29,7 @@ export default function Comment({comment}) {
     const date = new Date(comment.publishedTime)
     const { commentId, content, post, publishedTime, username } = {...comment,publishedTime:`${date.toDateString()} ${date.toLocaleTimeString()}`}
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} key={`comment-${publishedTime}`}>
             <CardActionArea>
                 <CardContent>
                     <div className={classes.header}>
