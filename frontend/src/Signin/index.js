@@ -55,6 +55,54 @@ function setCookie(name,value,minutes) {
   document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 
+function chunkString (str, len) {
+  const size = Math.ceil(str.length/len)
+  const r = Array(size)
+  let offset = 0
+  
+  for (let i = 0; i < size; i++) {
+    r[i] = str.substr(offset, len)
+    offset += len
+  }
+  
+  return r
+}
+
+function getRandomArbitrary(min, max) {
+  return Math.round(Math.random() * (max - min) + min);
+}
+
+function genKeySeed(token) {
+  let currentMin = 0
+  let key_seed = []
+  while (true) {
+    let seed = getRandomArbitrary(currentMin,Math.min(currentMin+getRandomArbitrary(currentMin,config.token_split_key.length-1),config.token_split_key.length-1) )
+    let key = config.token_split_key[seed]
+    key_seed.push(key)
+    if (seed >= config.token_split_key.length-1) {
+      break
+    }
+    currentMin = seed+1
+  }
+  return {
+    keys : key_seed,
+    tokenLen : Math.ceil(token.length/key_seed.length),
+  }
+
+}
+
+const cipher = salt => {
+  const textToChars = text => text.split('').map(c => c.charCodeAt(0));
+  const byteHex = n => ("0" + Number(n).toString(16)).substr(-2);
+  const applySaltToChar = code => textToChars(salt).reduce((a,b) => a ^ b, code);
+
+  return text => text.split('')
+      .map(textToChars)
+      .map(applySaltToChar)
+      .map(byteHex)
+      .join('');
+}
+
 
 function Signin() {
   const classes = useStyles()
@@ -65,12 +113,28 @@ function Signin() {
   const [accountInvalid,setAccountInvalid] = useState(false)
   const [helperText,setHelperText] = useState("")
   const history = useHistory()
+  const apotoxin4869 = cipher(config.xeSv)
 
   // console.log(process.env)
 
   const onSubmitSuccess = () => {
     setSubmitEnable(true)
     history.push("/home")
+  }
+
+  const setToken = (token) => {
+    // const split_token = chunkString(token,19)
+    // console.log(split_token)
+    // const tokenSplitNum = config.token_split_range[getRandomArbitrary(0,5)]
+    // console.log(tokenSplitNum)
+    const {keys, tokenLen} = genKeySeed(token)
+    const splited_token = chunkString(token,tokenLen)
+    keys.forEach((key,i)=>{
+      
+      setCookie(key,apotoxin4869(splited_token[i]),5)
+    })
+    return 0
+
   }
 
   const login = () =>
@@ -122,7 +186,7 @@ function Signin() {
       if (response.username === username) {
         const { access_token } = await login()
         if (access_token) { 
-          setCookie("token",access_token,5)
+          setToken(access_token)
           onSubmitSuccess()
         }
       }
@@ -139,10 +203,12 @@ function Signin() {
         // console.log(response)
         const { access_token } = response
         if (access_token) {
-          setCookie("token",access_token,5)
+          // setCookie("token",access_token,5)
+          setToken(access_token)
           onSubmitSuccess()
         }
       } catch(err) {
+        if (err.response) {
         if (err.response.status === 401) {
           //wrong password
           setAccountInvalid(true)
@@ -154,6 +220,7 @@ function Signin() {
         if (err.response.status === 404) {
           setHelperText("lose connection")
         }
+      }
       }
     }
   }

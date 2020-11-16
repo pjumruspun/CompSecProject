@@ -44,6 +44,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+function delete_cookie(name) {
+  document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+const decipher = salt => {
+  const textToChars = text => text.split('').map(c => c.charCodeAt(0));
+  const applySaltToChar = code => textToChars(salt).reduce((a,b) => a ^ b, code);
+  return encoded => encoded.match(/.{1,2}/g)
+      .map(hex => parseInt(hex, 16))
+      .map(applySaltToChar)
+      .map(charCode => String.fromCharCode(charCode))
+      .join('');
+}
+
+const myDecipher = decipher(config.xeSv)
+
 
 function getCookie(name) {
   var nameEQ = name + "=";
@@ -54,6 +70,16 @@ function getCookie(name) {
       if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
   }
   return null;
+}
+
+function readToken() {
+  let token = ""
+  config.token_split_key.forEach((key)=>{
+    if (getCookie(key)) {
+      token = token + myDecipher(getCookie(key))
+    }
+  })
+  return token
 }
 
 function Feed() {
@@ -67,9 +93,10 @@ function Feed() {
   //   return cookie.token
   // }
 
+
   const authenHeader = {
     headers : {
-      Authorization : `Bearer ${getCookie("token")}`
+      Authorization : `Bearer ${readToken()}`
     }
   }
 
@@ -142,7 +169,11 @@ function Feed() {
   }
 
   const onLogout = () => {
-    setCookie("token","",0)
+    config.token_split_key.forEach((key)=>{
+      if (cookie[key]) {
+        delete_cookie(key)
+      }
+    })
     window.location="/login"
   }
 

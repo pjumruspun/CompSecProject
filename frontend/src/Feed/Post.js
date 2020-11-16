@@ -76,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
 
 var edittedContent = ""
 
+
 export default function Post({post, authenHeader, username:signedUsername, refetchPost, isModerator}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
