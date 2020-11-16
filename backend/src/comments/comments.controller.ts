@@ -8,13 +8,6 @@ import { CommentsService } from './comments.service';
 export class CommentsController {
     constructor(private commentsService: CommentsService) {}
 
-    // Get all comments
-    // This should not be available in release
-    @Get()
-    async findAll(): Promise<CommentsEntity[]> {
-        return this.commentsService.findAll();
-    }
-
     // Get one comment, by commentId
     // Permission: user or mod?
     // Not sure if this is needed at all
