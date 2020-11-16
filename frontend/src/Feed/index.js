@@ -35,8 +35,25 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     backgroundColor: "#eeeeee",
     wordWrap: "break-word"
+  },
+  logoutBUtton : {
+    background:"#4caf50",
+    margin:"16px 0",
+    "&:hover" : {
+      background:"#388e3c",
+    }
   }
 }));
+
+function setCookie(name,value,minutes) {
+  var expires = "";
+  if (minutes) {
+      var date = new Date();
+      date.setTime(date.getTime() + (minutes*60*1000));
+      expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
 
 function getCookie(name) {
   var nameEQ = name + "=";
@@ -96,7 +113,7 @@ function Feed() {
       if (err.response) {
         if (err.response.status === 401) {
           console.log("401")
-          return window.location=`${window.location.hostname}/login`
+          return window.location=`/login`
         }
       }
     }
@@ -132,6 +149,11 @@ function Feed() {
     }
   }
 
+  const onLogout = () => {
+    setCookie("token","",0)
+    window.location="/login"
+  }
+
   useEffect( async ()=>{
     try {
       const user = await getProfile()
@@ -160,6 +182,7 @@ function Feed() {
               {`Name : ${user&&user.username}`}
             </div>
           </Paper>
+          <Button fullWidth onClick={onLogout} className={classes.logoutBUtton}>Log out</Button>
         </Grid>
         <Grid item xs={9}>
           <Paper className={classes.paper}>
@@ -169,7 +192,14 @@ function Feed() {
           <Post /> */}
           <NewPost username={user?user.username:""} content={content} handleContent={handleContent} onPost={handlePost}/>
           {feed.map((post,i)=>(
-            <Post post={post} authenHeader={authenHeader} username={user.username||""} refetchPost={refetchPost} key={`feed-${i}`}/>
+            <Post 
+            post={post} 
+            authenHeader={authenHeader} 
+            username={user.username||""} 
+            refetchPost={refetchPost} 
+            key={`feed-${i}`}
+            isModerator = {user.isModerator}
+            />
           ))}
           </Paper>
         </Grid>

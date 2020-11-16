@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
 
 var edittedContent = ""
 
-export default function Post({post, authenHeader, username:signedUsername, refetchPost}) {
+export default function Post({post, authenHeader, username:signedUsername, refetchPost, isModerator}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [comment,setComment] = useState("")
@@ -96,7 +96,8 @@ export default function Post({post, authenHeader, username:signedUsername, refet
       setCommentList(commentsList)
     } catch(err) {
       if (err.response.status === 401) {
-        return window.location=`${window.location.hostname}/login`
+        // console.log(window.location.hostname)
+        return window.location=`/login`
       }
     }
     
@@ -191,7 +192,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
   }
 
   const onEditPost = () => {
-    if (signedUsername === username) {
+    if (signedUsername === username || isModerator) {
       setPostEditing(true)
     } else {
       setTimeout(()=>{
@@ -203,7 +204,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
     e.preventDefault()
     try {
       const response = await createComment()
-      console.log(response)
+      // console.log(response)
       if (response.post === postId) {
         setComment("")
         setExpanded(true)
@@ -296,7 +297,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
             {username?username[0].toUpperCase():"?"}
           </Avatar>
         }
-        action={
+        action={((signedUsername === username) || isModerator) &&
           <IconButton aria-label="settings" onClick={openMenu}>
             <MoreVertIcon />
           </IconButton>
@@ -305,8 +306,9 @@ export default function Post({post, authenHeader, username:signedUsername, refet
         subheader={publishedTime}
       />
       <CardContent className={classes.postData} >
-        {!postEditing?<Typography variant={postEditing?"outlined":"body2"} color="textPrimary" component="p">
-        {content}
+        {!postEditing?
+        <Typography variant={postEditing?"outlined":"body2"} color="textPrimary" component="p">
+          {content}
         </Typography>:
         <TextField variant="outlined" defaultValue={content} size="small"
           onChange={(e)=>{edittedContent=e.target.value}}
@@ -344,9 +346,17 @@ export default function Post({post, authenHeader, username:signedUsername, refet
           {/* <Comment />
           <Comment />
           <Comment /> */}
-          {commentList.map((comment)=>(
+          {commentList.map((comment,i)=>(
             postId === comment.post &&
-            <Comment comment={comment}/>
+            <Comment 
+              key ={`comment-comp-${i}-${publishedTime}`}
+              comment={comment} 
+              signedUsername={signedUsername} 
+              setNotification={setNotification} 
+              authenHeader={authenHeader}
+              refetchComment={refetchComment}
+              isModerator={isModerator}
+            />
           ))}
         </CardContent>
       </Collapse>
@@ -362,7 +372,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
           onKeyPress={(e)=>{
             if (e.key==="Enter") {
               // handlePostComment()
-              console.log(comment)
+              // console.log(comment)
             }
           }}
         />

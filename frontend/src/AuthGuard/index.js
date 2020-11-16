@@ -15,7 +15,7 @@ function getCookie(name) {
 
 function AuthGuard({children}) {
   const token = getCookie("token")
-
+  console.log(token)
   if (!token) return <Redirect to="/login"/>
 
   return children

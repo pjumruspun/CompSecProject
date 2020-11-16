@@ -55,7 +55,6 @@ function setCookie(name,value,minutes) {
   document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 
-console.log(process.env)
 
 function Signin() {
   const classes = useStyles()
@@ -137,7 +136,7 @@ function Signin() {
       setSubmitEnable(false)
       try {
         let response = await login()
-        console.log(response)
+        // console.log(response)
         const { access_token } = response
         if (access_token) {
           setCookie("token",access_token,5)
