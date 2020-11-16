@@ -1,9 +1,8 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {
   makeStyles,
   Grid,
   TextField,
-  Typography,
   Avatar,
   InputAdornment,
   IconButton,
@@ -28,7 +27,6 @@ const useStyles = makeStyles((theme)=>({
   } 
 }))
 
-var content
 
 function NewPost({username,content,handleContent,onPost}) {
   const classes = useStyles()

@@ -2,14 +2,11 @@ import React from 'react'
 import {
   Dialog,
   Grid,
-  makeStyles,
   Button,
   Slide,
   TransitionProps,
   DialogTitle,
-  DialogContent,
   DialogActions,
-  DialogContentText
 } from '@material-ui/core'
 
 const Transition = React.forwardRef(function Transition(
@@ -19,17 +16,9 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const useStyles = makeStyles((theme)=>({
-  root :{
-
-  }
-}))
 
 
 function RegisConfirmDialog({open,handleClose,handleConfirm}) {
-  const classes = useStyles()
-
-
 
   return (
     <Dialog

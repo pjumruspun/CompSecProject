@@ -85,7 +85,6 @@ export default function Post({post, authenHeader, username:signedUsername, refet
   const [openNoti,setOpenNoti] = useState(false)
   const [messageNoti,setMessageNoti] = useState("")
   const [postEditing,setPostEditing] = useState(false)
-  const [PostContentComp,setPostContentComp] = useState(Typography)
 
   const date = new Date(post.publishedTime)
   const {content, postId, publishedTime, username} = {...post,publishedTime:`${date.toDateString()} ${date.toLocaleTimeString()}`}
@@ -103,13 +102,13 @@ export default function Post({post, authenHeader, username:signedUsername, refet
     
   },[post])
 
-  useEffect(()=>{
-    if (postEditing) {
-      setPostContentComp(TextField)
-    } else {
-      setPostContentComp(Typography)
-    }
-  },[postEditing])
+  // useEffect(()=>{
+  //   if (postEditing) {
+  //     setPostContentComp(TextField)
+  //   } else {
+  //     setPostContentComp(Typography)
+  //   }
+  // },[postEditing])
   
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -319,7 +318,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
           onChange={(e)=>{edittedContent=e.target.value}}
           onKeyPress={(e)=>{
             if (e.key === "Enter") {
-              console.log(edittedContent)
+              // console.log(edittedContent)
               handleEditPost()
             }
           }}
