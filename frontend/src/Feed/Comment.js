@@ -87,7 +87,14 @@ export default function Comment({comment, authenHeader, setNotification, refetch
     })
 
     const onEditComment = () => {
-        setIsEditting(true)
+        if (signedUsername === username || isModerator) {
+            setIsEditting(true)
+            edittedContent = content
+          } else {
+            setTimeout(()=>{
+              setNotification("เจ้าของ post เท่านั้นจึงจะมีสิทธิ์แก้ไข post")
+            },100)
+          }
     }
 
     const handleDeleteComment = async () => {

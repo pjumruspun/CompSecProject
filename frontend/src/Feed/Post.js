@@ -194,6 +194,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
   const onEditPost = () => {
     if (signedUsername === username || isModerator) {
       setPostEditing(true)
+      edittedContent = content
     } else {
       setTimeout(()=>{
         setNotification("เจ้าของ post เท่านั้นจึงจะมีสิทธิ์แก้ไข post")
@@ -203,12 +204,16 @@ export default function Post({post, authenHeader, username:signedUsername, refet
   const handlePostComment = async (e) => {
     e.preventDefault()
     try {
+      if (comment.length > 0) {
       const response = await createComment()
       // console.log(response)
       if (response.post === postId) {
         setComment("")
         setExpanded(true)
         refetchComment()
+      }
+      } else {
+        setNotification(`คุณคิดอะไรอยู่ ${signedUsername}`)
       }
     } catch(err) {
       console.log(err)
@@ -328,7 +333,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
       </CardContent>
       <CardActions disableSpacing>
         <Typography variant="body2" color="textSecondary" component="p">
-          Comments
+          {`Comments (${commentList.length})`}
         </Typography>
         <IconButton
           className={clsx(classes.expand, {
