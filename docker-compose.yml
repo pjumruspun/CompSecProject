@@ -19,7 +19,9 @@ services:
       - 3000:3000
     volumes:
       - ./frontend:/usr/src/app
-
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - BACKEND_ENDPOINT=localhost
   db:
     env_file:
       - ./backend/.env
@@ -31,3 +33,4 @@ services:
     environment: 
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_TCP_PORT: ${DB_PORT}
