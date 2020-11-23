@@ -1,5 +1,5 @@
 const config = {
-  BACKEND_ENDPOINT:"http://35.185.182.75:3001",
+  BACKEND_ENDPOINT:"http://34.87.182.129:3001",
   token_split_key : [
     "xVrs",
     "woxpSx",
