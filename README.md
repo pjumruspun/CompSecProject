@@ -14,3 +14,10 @@ password: \E.fn$Enr=MW^"5W
 username: testtest
 password: @N~GeZscE)xv84D8
 ```
+
+## Step
+
+1. `cd frontend` and `npm install`
+2. `cd backend` and `npm install`
+3. put `.env` file in `/backend` (ex. /backend/.env)
+4. run `docker-compose --env-file ./backend/.env up`
