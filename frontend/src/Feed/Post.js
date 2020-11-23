@@ -295,6 +295,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
   )
   return (
     <Card className={classes.post} key={`post-${publishedTime}`}>
+      {console.log(isModerator)}
       <CardHeader
         className={classes.postHeader}
         avatar={
@@ -302,7 +303,7 @@ export default function Post({post, authenHeader, username:signedUsername, refet
             {username?username[0].toUpperCase():"?"}
           </Avatar>
         }
-        action={((signedUsername === username) || isModerator) &&
+        action={ ((signedUsername === username) || isModerator) &&
           <IconButton aria-label="settings" onClick={openMenu}>
             <MoreVertIcon />
           </IconButton>

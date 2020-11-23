@@ -10,7 +10,7 @@ export class AppController {
     @UseGuards(JwtAuthGuard)	
     @Get('profile')	
     getProfile(@Request() req) {	
-        const { hashedPassword, isModerator, ...result } = req.user;
+        const { hashedPassword, ...result } = req.user;
         return result;	
     }
     @UseGuards(LocalAuthGuard)
