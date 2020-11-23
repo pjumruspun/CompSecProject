@@ -15,7 +15,7 @@ username: testtest
 password: @N~GeZscE)xv84D8
 ```
 
-## Step
+## Setup & Run
 
 1. `cd frontend` and `npm install`
 2. `cd backend` and `npm install`
